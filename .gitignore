@@ -1,0 +1,11 @@
+*Packages
+*.build
+*xcuserdata
+*.xcodeproj/
+*.xcodeproj
+*.pbxproj
+*DerivedData/
+*.DS_Store
+*.swiftpm
+*xcschememanagement.plist
+*project.pbxproj
