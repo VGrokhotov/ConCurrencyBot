@@ -23,16 +23,18 @@ do {
     ///Creating and adding handlers for commands, text, etc
     let startCommandHandler = CommandHandler(commands: ["/start"], callback: start)
     let helpCommandHandler = CommandHandler(commands: ["/help"], callback: help)
+    let cbAllCommandHandler = CommandHandler(commands: ["/cb"], callback: cbAll)
     let echoHandler = MessageHandler(filters: Filters.text, callback: echoResponse)
     let newMemberHandler = NewMemberHandler(callback: newMember)
     dispatcher.add(handler: startCommandHandler)
     dispatcher.add(handler: helpCommandHandler)
+    dispatcher.add(handler: cbAllCommandHandler)
     dispatcher.add(handler: echoHandler)
     dispatcher.add(handler: newMemberHandler)
     
     ///Longpolling updates
     _ = try Updater(bot: bot, dispatcher: dispatcher).startLongpolling().wait()
-    
+
 } catch {
     print(error.localizedDescription)
 }
