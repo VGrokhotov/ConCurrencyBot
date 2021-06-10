@@ -24,11 +24,13 @@ do {
     let startCommandHandler = CommandHandler(commands: ["/start"], callback: start)
     let helpCommandHandler = CommandHandler(commands: ["/help"], callback: help)
     let cbAllCommandHandler = CommandHandler(commands: ["/cb"], callback: cbAll)
+    let localBanksCommandHandler = CommandHandler(commands: ["/local"], callback: localBanks)
     let echoHandler = MessageHandler(filters: Filters.text, callback: echoResponse)
     let newMemberHandler = NewMemberHandler(callback: newMember)
     dispatcher.add(handler: startCommandHandler)
     dispatcher.add(handler: helpCommandHandler)
     dispatcher.add(handler: cbAllCommandHandler)
+    dispatcher.add(handler: localBanksCommandHandler)
     dispatcher.add(handler: echoHandler)
     dispatcher.add(handler: newMemberHandler)
     
