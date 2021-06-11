@@ -14,7 +14,7 @@ class LocalBanksNetworkService {
     let urlBase = "https://www.banki.ru/products/currency/cash/"
     let backslash = "/"
     
-    func getCurrency(currency: String, location: String, amount: Int, completion: @escaping ((Data, String, String)) -> (), errCompletion: @escaping (String) -> ()) {
+    func getCurrency(currency: String, location: String, completion: @escaping (Data) -> (), errCompletion: @escaping (String) -> ()) {
         
         guard let url = URL(string: urlBase + currency + backslash + location + backslash) else {
             errCompletion("Cannot get currency rate")
@@ -31,7 +31,7 @@ class LocalBanksNetworkService {
                         errCompletion("Something wrong with API query")
                         return
                     }
-                    completion((data, currency, location))
+                    completion(data)
                 default:
                     errCompletion("Something wrong with API query")
                 }
