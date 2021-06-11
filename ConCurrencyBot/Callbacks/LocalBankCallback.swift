@@ -45,7 +45,7 @@ func localBanks(_ update: Update, _ context: BotContext?) throws {
     } errCompletion: { error in
         let params = Bot.SendMessageParams(
             chatId: .chat(message.chat.id),
-            text: "Something bad has happend"
+            text: "Cannot get offers now"
         )
         let _ = try? bot.sendMessage(params: params)
     }
