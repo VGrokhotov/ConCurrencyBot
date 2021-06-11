@@ -9,8 +9,6 @@ import Foundation
 
 class LocalBanksNetworkService {
     
-    static let shared = LocalBanksNetworkService()
-    
     let urlBase = "https://www.banki.ru/products/currency/cash/"
     let backslash = "/"
     

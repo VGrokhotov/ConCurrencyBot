@@ -12,7 +12,7 @@ import Telegrammer
 func cbAll(_ update: Update, _ context: BotContext?) throws {
     guard let message = update.message else { return }
     
-    CBNetworkService.shared.getCurrency { cbCurrency in
+    CBNetworkService().getCurrency { cbCurrency in
         let params = Bot.SendMessageParams(
             chatId: .chat(message.chat.id),
             text:

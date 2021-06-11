@@ -9,9 +9,6 @@ import Foundation
 
 class CBNetworkService: NetworkService {
     
-    private override init() {}
-    static let shared = CBNetworkService()
-    
     let dailyURL = URL(string: "https://www.cbr-xml-daily.ru/daily_json.js")!
     let latestURL = URL(string: "https://www.cbr-xml-daily.ru/latest.js")!
     
