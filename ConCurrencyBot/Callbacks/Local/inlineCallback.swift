@@ -45,5 +45,6 @@ enum Currency: String {
 enum Command {
     case localBest
     case local
+    case cbDate
 }
 

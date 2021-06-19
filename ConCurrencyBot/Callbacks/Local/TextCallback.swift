@@ -8,6 +8,7 @@
 import Foundation
 import Telegrammer
 import SwiftSoup
+import SwiftyXMLParser
 
 ///Callback for Message handler, which send echo message to user
 func echoResponse(_ update: Update, _ context: BotContext?) throws {
@@ -18,8 +19,6 @@ func echoResponse(_ update: Update, _ context: BotContext?) throws {
     
     if let _ = userTextMode[user.id] {
         guard
-            let currency = userChosenCurrency[user.id],
-            let originalLocation = message.text,
             let command = userChosenCommand[user.id]
         else {
             let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "Something has happend")
@@ -27,10 +26,20 @@ func echoResponse(_ update: Update, _ context: BotContext?) throws {
             return
         }
         
-        let locationForSite = transliterate(nonLatin: originalLocation)
-        
         switch command {
         case .local:
+            
+            guard
+                let currency = userChosenCurrency[user.id],
+                let originalLocation = message.text
+            else {
+                let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "Something has happend")
+                try bot.sendMessage(params: params)
+                return
+            }
+            
+            let locationForSite = transliterate(nonLatin: originalLocation)
+            
             LocalBanksNetworkService().getCurrency(currency: currency.rawValue, location: locationForSite) { data in
         
                 let doc = try! SwiftSoup.parse(String(data: data, encoding: .utf8)!)
@@ -72,6 +81,18 @@ func echoResponse(_ update: Update, _ context: BotContext?) throws {
                 let _ = try? bot.sendMessage(params: params)
             }
         case .localBest:
+            
+            guard
+                let currency = userChosenCurrency[user.id],
+                let originalLocation = message.text
+            else {
+                let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "Something has happend")
+                try bot.sendMessage(params: params)
+                return
+            }
+            
+            let locationForSite = transliterate(nonLatin: originalLocation)
+            
             LocalBanksNetworkService().getCurrency(currency: currency.rawValue, location: locationForSite) { data in
                 
                 let doc = try? SwiftSoup.parse(String(data: data, encoding: .utf8)!)
@@ -115,9 +136,61 @@ func echoResponse(_ update: Update, _ context: BotContext?) throws {
                 )
                 let _ = try? bot.sendMessage(params: params)
             }
+        case .cbDate:
+            
+            guard
+                let date = message.text,
+                let regex = try? NSRegularExpression(pattern: "^[0-9]{2}/[0-9]{2}/[0-9]{4}$"),
+                let _ = regex.firstMatch(in: date, options: [], range: NSRange(location: 0, length: date.count))
+            else {
+                let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "Wrong date, try another one")
+                try bot.sendMessage(params: params)
+                return
+            }
+            
+            CBNetworkService().getCurrency(date: date) { data in
+                
+                var resultArray = [DateCurrency]()
+                
+                let currencies = ["USD", "EUR", "GBP", "JPY", "CNY"]
+                
+                let xml = XML.parse(data)
+                for element in xml["ValCurs", "Valute"] {
+                    if let currency = element["CharCode"].text, currencies.contains(currency) {
+                        guard
+                            let nominal = element["Nominal"].text,
+                            let value =  element["Value"].text
+                        else {
+                            let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "Cannot get currencies")
+                            let _ = try? bot.sendMessage(params: params)
+                            return
+                        }
+                        resultArray.append(DateCurrency(currency: currency, nominal: nominal, value: value))
+                    }
+                }
+                
+                var resultString = "CB currencies rate for \(date):\n"
+                
+                resultArray.forEach { element in
+                    resultString += element.nominal + " " + element.currency + " for " + element.value + " ₽\n"
+                }
+                
+                userTextMode.removeValue(forKey: user.id)
+                userChosenCommand.removeValue(forKey: user.id)
+                
+                let params = Bot.SendMessageParams(
+                    chatId: .chat(message.chat.id),
+                    text: resultString
+                )
+                let _ = try? bot.sendMessage(params: params)
+            } errCompletion: { error in
+                let params = Bot.SendMessageParams(
+                    chatId: .chat(message.chat.id),
+                    text: "Cannot get currencies"
+                )
+                let _ = try? bot.sendMessage(params: params)
+            }
         }
-        
-        
     } else {
         if message.chat.type == .private {
             let params = Bot.SendMessageParams(chatId: .chat(message.chat.id), text: "No matching commands")

@@ -9,14 +9,14 @@ import Foundation
 
 struct CBCurrency: Decodable {
     
-    let values: Currencys
+    let values: Currencies
     
     enum CodingKeys: String, CodingKey {
         case values = "rates"
     }
 }
 
-struct Currencys: Decodable {
+struct Currencies: Decodable {
     
     let dollar: Double
     let euro: Double
@@ -47,4 +47,10 @@ struct Currencys: Decodable {
         yen = 1 / rubleToYen
         yuan = 1 / rubleToYuan
     }
+}
+
+struct DateCurrency {
+    let currency: String
+    let nominal: String
+    let value: String
 }
