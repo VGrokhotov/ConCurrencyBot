@@ -25,7 +25,7 @@ func start(_ update: Update, _ context: BotContext?) throws {
         text:
             """
             Hey \(name)!
-            I'm ConCurrencyBot 😎, made by VGrokhotov!
+            I'm ConCurrencyBot 😎, made by @vgrokhotov!
             To see my abilities send /help to me.
             """
     )
@@ -67,7 +67,7 @@ func newMember(_ update: Update) throws {
             text: """
             🎊🎉👋😃
             Hey \(name)!
-            I'm ConCurrencyBot 😎, made by VGrokhotov
+            I'm ConCurrencyBot 😎, made by @vgrokhotov
             """)
         try bot.sendMessage(params: params)
     }
