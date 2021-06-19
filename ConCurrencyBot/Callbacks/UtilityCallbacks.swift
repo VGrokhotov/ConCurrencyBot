@@ -72,3 +72,19 @@ func newMember(_ update: Update) throws {
         try bot.sendMessage(params: params)
     }
 }
+
+///Callback for Command handler, which stops all commands
+func stop(_ update: Update, _ context: BotContext?) throws {
+    guard
+        let message = update.message,
+        let user = message.from
+    else { return }
+    
+    deleteAllCaches(user.id)
+}
+
+func deleteAllCaches(_ id: Int64) {
+    userTextMode.removeValue(forKey: id)
+    userChosenCommand.removeValue(forKey: id)
+    userChosenCurrency.removeValue(forKey: id)
+}
