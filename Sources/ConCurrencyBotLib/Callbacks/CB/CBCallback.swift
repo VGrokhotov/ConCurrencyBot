@@ -9,7 +9,7 @@ import Foundation
 import Telegrammer
 
 ///Callback for Command handler, which send CB currensy
-func cbAll(_ update: Update, _ context: BotContext?) throws {
+public func cbAll(_ update: Update, _ context: BotContext?) throws {
     guard let message = update.message else { return }
     
     CBNetworkService().getCurrency { cbCurrency in
@@ -25,12 +25,12 @@ func cbAll(_ update: Update, _ context: BotContext?) throws {
                 Yuan   - \(round(cbCurrency.values.yuan * 100) / 100) ₽
                 """
         )
-        let _ = try? bot.sendMessage(params: params)
+        let _ = try? Storage.shared.bot.sendMessage(params: params)
     } errCompletion: { error in
         let params = Bot.SendMessageParams(
             chatId: .chat(message.chat.id),
             text: "Cannot get CB exchange rate now"
         )
-        let _ = try? bot.sendMessage(params: params)
+        let _ = try? Storage.shared.bot.sendMessage(params: params)
     }
 }

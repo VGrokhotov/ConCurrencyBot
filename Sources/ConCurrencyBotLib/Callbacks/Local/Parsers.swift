@@ -9,7 +9,7 @@ import Foundation
 import SwiftSoup
 import SwiftyXMLParser
 
-func localParse(data: Data, currency: Currency, originalLocation: String) -> String? {
+public func localParse(data: Data, currency: Currency, originalLocation: String) -> String? {
     let doc = try! SwiftSoup.parse(String(data: data, encoding: .utf8)!)
 
     guard
@@ -36,7 +36,7 @@ func localParse(data: Data, currency: Currency, originalLocation: String) -> Str
     return result
 }
 
-func localBestParse(data: Data, currency: Currency, originalLocation: String) -> String? {
+public func localBestParse(data: Data, currency: Currency, originalLocation: String) -> String? {
     
     do {
         let doc = try SwiftSoup.parse(String(data: data, encoding: .utf8)!)
@@ -70,7 +70,7 @@ func localBestParse(data: Data, currency: Currency, originalLocation: String) ->
     }
 }
 
-func cbDateParce(date: String, data: Data) -> String? {
+public func cbDateParce(date: String, data: Data) -> String? {
     
     var resultArray = [DateCurrency]()
     

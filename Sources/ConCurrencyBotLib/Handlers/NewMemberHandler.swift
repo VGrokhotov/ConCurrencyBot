@@ -8,20 +8,20 @@
 import Foundation
 import Telegrammer
 
-class NewMemberHandler: Handler {
+public class NewMemberHandler: Handler {
     
-    typealias NewMemberCallback = (_ update: Update) throws -> Void
+    public typealias NewMemberCallback = (_ update: Update) throws -> Void
     
-    var name: String
+    public var name: String
     let filters = StatusUpdateFilters.newChatMembers
     var callback: NewMemberCallback
     
-    init(callback: @escaping NewMemberCallback, name: String = String(describing: NewMemberHandler.self)) {
+    public init(callback: @escaping NewMemberCallback, name: String = String(describing: NewMemberHandler.self)) {
         self.callback = callback
         self.name = name
     }
     
-    func check(update: Update) -> Bool {
+    public func check(update: Update) -> Bool {
         guard
             let message = update.message,
             filters.check(message)
@@ -29,7 +29,7 @@ class NewMemberHandler: Handler {
         return true
     }
     
-    func handle(update: Update, dispatcher: Dispatcher) {
+    public func handle(update: Update, dispatcher: Dispatcher) {
         do {
             try callback(update)
         } catch {

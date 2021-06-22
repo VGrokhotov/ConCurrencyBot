@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "ConCurrencyBot",
     platforms: [
-            .macOS(.v10_14),
-        ],
+        .macOS(.v10_14),
+    ],
     dependencies: [
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.3.2"),
         .package(url: "https://github.com/yahoojapan/SwiftyXMLParser.git", from: "5.3.0"),
@@ -15,10 +15,13 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ConCurrencyBot",
+            name: "ConCurrencyBotLib",
             dependencies: ["SwiftSoup", "SwiftyXMLParser", "Telegrammer"]),
+        .target(
+            name: "ConCurrencyBot",
+            dependencies: ["ConCurrencyBotLib"]),
         .testTarget(
             name: "ConCurrencyBotTests",
-            dependencies: ["ConCurrencyBot"]),
+            dependencies: ["ConCurrencyBotLib"]),
     ]
 )

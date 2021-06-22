@@ -10,10 +10,10 @@ import Telegrammer
 import SwiftSoup
 
 ///Callback for Command handler, which send CB currensy
-func localBanks(_ update: Update, _ context: BotContext?) throws {
+public func localBanks(_ update: Update, _ context: BotContext?) throws {
     guard let message = update.message, let user = message.from  else { return }
     
-    userChosenCommand[user.id] = .local
+    Storage.shared.userChosenCommand[user.id] = .local
     
     let markup = chooseCurrencyMenu()
     
@@ -22,5 +22,5 @@ func localBanks(_ update: Update, _ context: BotContext?) throws {
         text: "Choose the currency you want to exchange",
         replyMarkup: .inlineKeyboardMarkup(markup)
     )
-    let _ = try? bot.sendMessage(params: params)
+    let _ = try? Storage.shared.bot.sendMessage(params: params)
 }

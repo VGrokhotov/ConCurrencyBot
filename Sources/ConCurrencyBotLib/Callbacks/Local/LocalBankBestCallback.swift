@@ -9,10 +9,10 @@ import Foundation
 import Telegrammer
 
 ///Callback for Command handler, which send CB currensy
-func localBanksBest(_ update: Update, _ context: BotContext?) throws {
+public func localBanksBest(_ update: Update, _ context: BotContext?) throws {
     guard let message = update.message, let user = message.from  else { return }
     
-    userChosenCommand[user.id] = .localBest
+    Storage.shared.userChosenCommand[user.id] = .localBest
     
     let markup = chooseCurrencyMenu()
     
@@ -21,5 +21,5 @@ func localBanksBest(_ update: Update, _ context: BotContext?) throws {
         text: "Choose the currency you want to exchange",
         replyMarkup: .inlineKeyboardMarkup(markup)
     )
-    let _ = try? bot.sendMessage(params: params)
+    let _ = try? Storage.shared.bot.sendMessage(params: params)
 }

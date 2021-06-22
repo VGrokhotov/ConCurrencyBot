@@ -9,7 +9,7 @@ import Foundation
 import Telegrammer
 
 ///Callback for Command handler, which send start message
-func start(_ update: Update, _ context: BotContext?) throws {
+public func start(_ update: Update, _ context: BotContext?) throws {
     guard
         let message = update.message,
         let user = message.from
@@ -29,11 +29,11 @@ func start(_ update: Update, _ context: BotContext?) throws {
             To see my abilities send /help to me.
             """
     )
-    try bot.sendMessage(params: params)
+    try Storage.shared.bot.sendMessage(params: params)
 }
 
 ///Callback for Command handler, which send help message
-func help(_ update: Update, _ context: BotContext?) throws {
+public func help(_ update: Update, _ context: BotContext?) throws {
     guard let message = update.message else { return }
     
     let params = Bot.SendMessageParams(
@@ -43,11 +43,11 @@ func help(_ update: Update, _ context: BotContext?) throws {
             Sorry, nothing here yet 😣😣😣
             """
     )
-    try bot.sendMessage(params: params)
+    try Storage.shared.bot.sendMessage(params: params)
 }
 
 ///Callback for handler, that sends Hello message for new chat member
-func newMember(_ update: Update) throws {
+public func newMember(_ update: Update) throws {
     
     guard
         let message = update.message,
@@ -69,12 +69,12 @@ func newMember(_ update: Update) throws {
             Hey \(name)!
             I'm ConCurrencyBot 😎, made by @vgrokhotov
             """)
-        try bot.sendMessage(params: params)
+        try Storage.shared.bot.sendMessage(params: params)
     }
 }
 
 ///Callback for Command handler, which stops all commands
-func stop(_ update: Update, _ context: BotContext?) throws {
+public func stop(_ update: Update, _ context: BotContext?) throws {
     guard
         let message = update.message,
         let user = message.from
@@ -84,7 +84,7 @@ func stop(_ update: Update, _ context: BotContext?) throws {
 }
 
 func deleteAllCaches(_ id: Int64) {
-    userTextMode.removeValue(forKey: id)
-    userChosenCommand.removeValue(forKey: id)
-    userChosenCurrency.removeValue(forKey: id)
+    Storage.shared.userTextMode.removeValue(forKey: id)
+    Storage.shared.userChosenCommand.removeValue(forKey: id)
+    Storage.shared.userChosenCurrency.removeValue(forKey: id)
 }

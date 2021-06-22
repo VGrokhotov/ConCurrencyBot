@@ -1,28 +1,17 @@
 //
-//  main.swift
-//  ConCurrencyBot
+//  File.swift
+//  
 //
-//  Created by Vladislav Grokhotov on 07.06.2021.
+//  Created by Vladislav Grokhotov on 22.06.2021.
 //
 
 import Foundation
 import Telegrammer
-
-guard let token = Enviroment.get("TOKEN") else {
-    print("TOKEN variable wasn't found in enviroment variables")
-    exit(1)
-}
-
-var settings = Bot.Settings(token: token)
-let bot = try! Bot(settings: settings)
-
-var userChosenCurrency: [Int64: Currency] = [:]
-var userChosenCommand: [Int64: Command] = [:]
-var userTextMode: [Int64: Bool] = [:]
+import ConCurrencyBotLib
 
 do {
     ///Dispatcher - handle all incoming messages
-    let dispatcher = Dispatcher(bot: bot)
+    let dispatcher = Dispatcher(bot: Storage.shared.bot)
     
     ///Creating and adding handlers for commands, text, etc
     let startCommandHandler = CommandHandler(commands: ["/start", "/start@VGCurrencyBot"], callback: start)
@@ -47,7 +36,7 @@ do {
     dispatcher.add(handler: inlineHandler)
     
     ///Longpolling updates
-    _ = try Updater(bot: bot, dispatcher: dispatcher).startLongpolling().wait()
+    _ = try Updater(bot: Storage.shared.bot, dispatcher: dispatcher).startLongpolling().wait()
 
 } catch {
     print(error.localizedDescription)
