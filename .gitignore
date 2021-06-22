@@ -9,3 +9,4 @@
 *.swiftpm
 *xcschememanagement.plist
 *project.pbxproj
+*Package.resolved
