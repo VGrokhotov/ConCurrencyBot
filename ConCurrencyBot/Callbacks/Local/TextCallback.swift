@@ -155,11 +155,52 @@ func echoResponse(_ update: Update, _ context: BotContext?) throws {
 }
 
 func transliterate(nonLatin: String) -> String {
-    return nonLatin
-        .applyingTransform(.toLatin, reverse: false)?
-        .applyingTransform(.stripDiacritics, reverse: false)?
-        .lowercased()
-        .replacingOccurrences(of: " ", with: "-") ?? nonLatin
+    
+    let dictionary: [String.Element: String] = [
+        "-": "-",
+        " ": "-",
+        "а": "a",
+        "б": "b",
+        "в": "v",
+        "г": "g",
+        "д": "d",
+        "е": "e",
+        "ё": "",
+        "ж": "zh",
+        "з": "a",
+        "и": "i",
+        "й": "y",
+        "к": "k",
+        "л": "l",
+        "м": "m",
+        "н": "n",
+        "о": "o",
+        "п": "p",
+        "р": "r",
+        "с": "s",
+        "т": "t",
+        "у": "u",
+        "ф": "f",
+        "х": "h",
+        "ц": "tss",
+        "ч": "ch",
+        "ш": "ssh",
+        "щ": "sch",
+        "ъ": "",
+        "ы": "yi",
+        "ь": "~",
+        "э": "je",
+        "ю": "yu",
+        "я": "ya"
+    ]
+    
+    var result = ""
+    
+    for char in nonLatin.lowercased() {
+        result.append(dictionary[char] ?? String(char))
+    }
+    
+    return result
 }
 
 
