@@ -40,7 +40,14 @@ public func help(_ update: Update, _ context: BotContext?) throws {
         chatId: .chat(message.chat.id),
         text:
             """
-            Sorry, nothing here yet 😣😣😣
+            The bot supports following commands:
+            /start - get a welcome message
+            /help - get help message with all functionality
+            /cb - get Central Bank currency rate
+            /cbdate - get Central Bank currency rate for a specific date
+            /local - get local banks currency exchange offers
+            /localbest - get local banks best currency exchange offer
+            /stop - stop the execution of any command
             """
     )
     try Storage.shared.bot.sendMessage(params: params)
