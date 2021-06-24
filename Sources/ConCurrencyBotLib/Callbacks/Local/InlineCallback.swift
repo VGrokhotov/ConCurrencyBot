@@ -1,5 +1,5 @@
 //
-//  inlineCallback.swift
+//  InlineCallback.swift
 //  ConCurrencyBot
 //
 //  Created by Vladislav Grokhotov on 11.06.2021.
