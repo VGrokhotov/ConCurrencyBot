@@ -41,11 +41,25 @@ public func echoResponse(_ update: Update, _ context: BotContext?) throws {
             
             LocalBanksNetworkService().getCurrency(currency: currency.rawValue, location: locationForSite) { data in
         
-                if let result = localParse(data: data, currency: currency, originalLocation: originalLocation) {
+                if let offers = localParse(data: data, currency: currency, originalLocation: originalLocation) {
+                    
+                    var result = ""
+                    var markup: ReplyMarkup?
+                    
+                    if offers.count > 5 {
+                        Storage.shared.userOffers[user.id] = (offers, 5, currency, originalLocation)
+                        let cutOffers = Array(offers[0..<5])
+                        result = generateResult(offers: cutOffers, currency: currency, originalLocation: originalLocation)
+                        markup = .inlineKeyboardMarkup(nextAndPreviousOffersMenu(shown: 5, amount: offers.count))
+                    } else {
+                        result = generateResult(offers: offers, currency: currency, originalLocation: originalLocation)
+                    }
+                    
                     
                     let params = Bot.SendMessageParams(
                         chatId: .chat(message.chat.id),
-                        text: result
+                        text: result,
+                        replyMarkup: markup
                     )
                     
                     deleteAllCaches(user.id)
@@ -199,4 +213,14 @@ func transliterate(nonLatin: String) -> String {
     }
     
     return result
+}
+
+func generateResult(offers: [BankOffer], currency: Currency, originalLocation: String) -> String {
+        var result = "Offers for exchanging " + currency.rawValue.uppercased() + " in " + originalLocation + ":\n"
+    
+        offers.forEach { offer in
+            result.append("\(offer.bank):\nsale for \(offer.sell)\nbuy with \(offer.buy)\n\n")
+        }
+    
+        return result
 }

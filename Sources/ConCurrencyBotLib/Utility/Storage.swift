@@ -24,5 +24,6 @@ public class Storage {
     public var userChosenCurrency: [Int64: Currency] = [:]
     public var userChosenCommand: [Int64: Command] = [:]
     public var userTextMode: [Int64: Bool] = [:]
+    public var userOffers: [Int64: ([BankOffer], Int, Currency, String)] = [:]
     public let bot: Bot
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BankOffer {
+public struct BankOffer {
     let bank: String
     let buy: String
     let sell: String

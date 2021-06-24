@@ -9,7 +9,7 @@ import Foundation
 import SwiftSoup
 import SwiftyXMLParser
 
-public func localParse(data: Data, currency: Currency, originalLocation: String) -> String? {
+public func localParse(data: Data, currency: Currency, originalLocation: String) -> [BankOffer]? {
     let doc = try! SwiftSoup.parse(String(data: data, encoding: .utf8)!)
 
     guard
@@ -26,14 +26,8 @@ public func localParse(data: Data, currency: Currency, originalLocation: String)
             }),
         offers.count > 0
     else { return nil }
-        
-    var result = "Offers for exchanging " + currency.rawValue.uppercased() + " in " + originalLocation + ":\n"
     
-    offers.forEach { offer in
-        result.append("\(offer.bank):\nsale for \(offer.sell)\nbuy with \(offer.buy)\n\n")
-    }
-    
-    return result
+    return offers
 }
 
 public func localBestParse(data: Data, currency: Currency, originalLocation: String) -> String? {
