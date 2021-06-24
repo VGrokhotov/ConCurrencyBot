@@ -25,7 +25,6 @@ public func inline(_ update: Update, _ context: BotContext?) throws {
             text: "Choose the currency you want to exchange\n\nYou have chosen \(currency.rawValue.uppercased())"
         )
     )
-
     
     let params = Bot.SendMessageParams(
         chatId: .chat(message.chat.id),
@@ -33,18 +32,3 @@ public func inline(_ update: Update, _ context: BotContext?) throws {
     )
     let _ = try? Storage.shared.bot.sendMessage(params: params)
 }
-
-public enum Currency: String {
-    case usd
-    case eur
-    case gbp
-    case jpy
-    case cny
-}
-
-public enum Command {
-    case localBest
-    case local
-    case cbDate
-}
-
